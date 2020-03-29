@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	createPictureFromText(text, filename, width, height);
+	createPictureFromText(text, filename, width, height, "fonts/cmunrm.ttf", 16);
     
 	return 0; 
 } 

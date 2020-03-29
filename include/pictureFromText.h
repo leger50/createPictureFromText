@@ -11,7 +11,7 @@
 
 #define OFFSET_FONT 0
 
-void createPictureFromText(char *text, char *filename, int width, int height);
+void createPictureFromText(char *text, char *filename, int width, int height, const char* pathToFont, int fontSize);
 
 unsigned char* readFontFile(const char* pathToFontFile);
 void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scale, int width, const char *text);

@@ -20,18 +20,17 @@
  * \note       NA
  */
 /*---------------------------------------------------------------------------*/
-void createPictureFromText(char *text, char *filename, int width, int height){
+void createPictureFromText(char *text, char *filename, int width, int height, const char* pathToFont, int fontSize){
     stbtt_fontinfo fontInfo;
     int compoChannel = COMPO_CHANNEL_MONO;
     
     /*Init font*/
-    unsigned char* fontBuffer = readFontFile("fonts/cmunrm.ttf");
+    unsigned char* fontBuffer = readFontFile(pathToFont);
     if (!stbtt_InitFont(&fontInfo, fontBuffer, OFFSET_FONT)){
         fprintf(stderr, "Failed to initialize font\n");
         exit(EXIT_FAILURE);
     }
     
-    int fontSize = 16;
     float scale = stbtt_ScaleForPixelHeight(&fontInfo, fontSize);
 
     /*Create bitmap picture*/
