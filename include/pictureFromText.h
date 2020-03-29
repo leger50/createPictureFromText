@@ -1,6 +1,9 @@
 #ifndef PICTURE_FROM_TEXT_H_
 #define PICTURE_FROM_TEXT_H_
 
+#include "stb_image_write.h" //Each function returns 0 on failure and non-0 on success.
+#include "stb_truetype.h"   //Each function returns 0 on failure and non-0 on success.
+
 #define COMPO_CHANNEL_MONO  1
 #define COMPO_CHANNEL_YA    2
 #define COMPO_CHANNEL_RGB   3
@@ -8,10 +11,9 @@
 
 #define OFFSET_FONT 0
 
-#include <stdbool.h>
-
 void createPictureFromText(char *text, char *filename, int width, int height);
 
 unsigned char* readFontFile(const char* pathToFontFile);
+void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scale, int width, const char *text);
 
 #endif /* PICTURE_FROM_TEXT_H_ */

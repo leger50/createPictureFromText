@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
 #include <getopt.h>
 
@@ -79,7 +78,6 @@ int main(int argc, char *argv[])
 	}
 
 	createPictureFromText(text, filename, width, height);
-	//printf("Picture %s|%d|%d|%s\n", text, width, height, filename); 
     
 	return 0; 
 } 
