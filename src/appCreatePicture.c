@@ -1,15 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
-#include <getopt.h>  
+#include <getopt.h>
+
+#include "pictureFromText.h"
 
 #define DEFAULT_WIDTH 			128
 #define DEFAULT_HEIGHT			128
 #define DEFAULT_NAME_FILE_OUT 	"fileout.png"
 
 void usage(int exitValue){
-	fprintf(stdout, "\nUsage: appCreatePicture -t \"complete sentence\" -i -w WIDTH -h HEIGHT -f \"fileout.png\"\n");
+	fprintf(stdout, "\nUsage: appCreatePicture -t \"complete sentence\" -w WIDTH -h HEIGHT -f \"fileout.png\"\n");
 	fprintf(stdout, "\t-t : text to put on picture\n");
 	fprintf(stdout, "\t-w : width in pixels (default : %d)\n", DEFAULT_WIDTH);
 	fprintf(stdout, "\t-h : height in pixels (default : %d)\n", DEFAULT_HEIGHT);
@@ -71,12 +72,12 @@ int main(int argc, char *argv[])
 		filename = DEFAULT_NAME_FILE_OUT;
 
 		if(!filename){
-			fprintf(stderr, "Failed to set out filename");
+			fprintf(stderr, "Failed to set out filename\n");
 			exit(EXIT_FAILURE);
 		}
 	}
 
-	printf("Picture %s|%d|%d|%s|%d\n", text, width, height, filename); 
+	createPictureFromText(text, filename, width, height);
     
 	return 0; 
 } 
