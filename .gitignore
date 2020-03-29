@@ -1,0 +1,6 @@
+.vscode/
+
+bin/app_createPicture
+
+*.o
+*.png
