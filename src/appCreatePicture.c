@@ -51,6 +51,8 @@ void usage(int exitValue){
 	fprintf(stdout, "\t--filename|-f : name of fileout (default : %s)\n", DEFAULT_NAME_FILE_OUT);
 	fprintf(stdout, "\t--usage|-u : Display usage\n");
 	
+	fprintf(stdout, "\nNotes : Fonts supported are .ttf and .otf\n");
+
 	exit(exitValue);
 }  
 
