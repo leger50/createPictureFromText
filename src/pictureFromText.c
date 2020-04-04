@@ -42,7 +42,7 @@ void createPictureFromText(char *text, char *filename, int width, int height, co
     addTextToBitmap(&fontInfo, bitmap, scale, width, text);
 
     /*Save picture*/
-    printf("Picture info<text|width|height|filename> : %s|%d|%d|%s\n", text, width, height, filename);
+    printf("--- Picture info ---\nText : %s\nSize : %d x %d\nFilename : %s\n", text, width, height, filename);
 
     int result = stbi_write_png(filename, width, height, compoChannel, bitmap, width);
     if(result != 0){
@@ -133,8 +133,7 @@ void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scal
     {
         /*If '\n' then we change line*/
         if(text[i] == '\\' && text[i+1] == 'n'){
-            x = 0;
-            yLine += ascent;
+            changeTextLine(&x, &yLine, ascent);
 
             i++; //to skip next character
         
@@ -150,8 +149,7 @@ void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scal
 
             /*Check if we can put character on picture, else, we change line*/
             if( (x+hSizeCodepoint) >= width){
-                x = 0;
-                yLine += ascent;
+                changeTextLine(&x, &yLine, ascent);
             }
 
             /* compute y (different characters have different heights) */
@@ -171,4 +169,29 @@ void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scal
 
         i++;
     }
+}
+
+/*---------------------------------------------------------------------------*/
+/**
+ * \brief      Change (x,y) coordinates to next line
+ * \details    
+ *             
+ * \param[in]  int hSizeCharacter   : size H of font, equivalent to :
+ *                      stbtt_GetFontVMetrics(fontInfo, &ascent, &descent, &lineGap);
+ *                      ascent *= scale;
+ *                      hSizeCharacter = ascent; 
+ *
+ * \param[out] int *x               : x coordinate
+ * \param[out] int *line            : line coordinate
+ * 
+ * \return     NA
+ *
+ * \warning    Params[in] must be not null
+ * \warning    Params[out] bitmap must be allocated before calling this function
+ * \note       NA
+ */
+/*---------------------------------------------------------------------------*/
+void changeTextLine(int *x, int *line, int hSizeCharacter){
+    *x = 0;
+    *line += hSizeCharacter;
 }
