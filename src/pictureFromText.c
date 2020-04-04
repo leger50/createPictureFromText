@@ -20,7 +20,7 @@
  * \note       NA
  */
 /*---------------------------------------------------------------------------*/
-void createPictureFromText(char *text, char *filename, int width, int height, const char* pathToFont, int fontSize){
+void createPictureFromText(char *text, char *filename, int width, int height, const char* pathToFont, int fontSize, int marginLeft, int marginTop){
     stbtt_fontinfo fontInfo;
     int compoChannel = COMPO_CHANNEL_MONO;
     
@@ -39,11 +39,11 @@ void createPictureFromText(char *text, char *filename, int width, int height, co
         fprintf(stderr, "Allocation of bitmap failed, out of memory ?\n");
         exit(EXIT_FAILURE);
     }
-    addTextToBitmap(&fontInfo, bitmap, scale, width, text);
+    addTextToBitmap(&fontInfo, bitmap, scale, width, text, marginLeft, marginTop);
 
     /*Save picture*/
-    printf("--- Picture info ---\nText : %s\nSize : %d x %d\nFilename : %s\nFont : %s (%d px)\n------\n", 
-        text, width, height, filename, pathToFont, fontSize);
+    printf("--- Picture info ---\nText : %s\nSize : %d x %d\nMargin (left|top) : %d|%d\nFilename : %s\nFont : %s (%d px)\n------\n", 
+        text, width, height, marginLeft, marginTop, filename, pathToFont, fontSize);
 
     int result = stbi_write_png(filename, width, height, compoChannel, bitmap, width);
     if(result != 0){
@@ -118,9 +118,9 @@ unsigned char* readFontFile(const char* pathToFontFile)
  * \note       NA
  */
 /*---------------------------------------------------------------------------*/
-void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scale, int width, const char *text){
-    int x = 0;
-    int yLine = 0;
+void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scale, int width, const char *text, int marginLeft, int marginTop){
+    int x = marginLeft;
+    int yLine = marginTop;
 
     int ascent, descent, lineGap;
     stbtt_GetFontVMetrics(fontInfo, &ascent, &descent, &lineGap);
@@ -134,7 +134,7 @@ void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scal
     {
         /*If '\n' then we change line*/
         if(text[i] == '\\' && text[i+1] == 'n'){
-            changeTextLine(&x, &yLine, ascent);
+            changeTextLine(&x, &yLine, ascent, marginLeft);
 
             i++; //to skip next character
         
@@ -150,7 +150,7 @@ void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scal
 
             /*Check if we can put character on picture, else, we change line*/
             if( (x+hSizeCodepoint) >= width){
-                changeTextLine(&x, &yLine, ascent);
+                changeTextLine(&x, &yLine, ascent, marginLeft);
             }
 
             /* compute y (different characters have different heights) */
@@ -192,7 +192,7 @@ void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scal
  * \note       NA
  */
 /*---------------------------------------------------------------------------*/
-void changeTextLine(int *x, int *line, int hSizeCharacter){
-    *x = 0;
+void changeTextLine(int *x, int *line, int hSizeCharacter, int marginLeft){
+    *x = marginLeft;
     *line += hSizeCharacter;
 }

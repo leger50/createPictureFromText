@@ -12,6 +12,9 @@
 #define DEFAULT_FONT_SIZE		16
 #define DEFAULT_NAME_FILE_OUT 	"fileout.png"
 
+#define DEFAULT_MARGIN_LEFT		0
+#define DEFAULT_MARGIN_TOP		0
+
 void usage(int exitValue){
 	fprintf(stdout, "\nUsage: appCreatePicture -t \"complete sentence\" -w WIDTH -h HEIGHT -s SIZE_FONT -f \"fileout.png\"\n");
 	fprintf(stdout, "\t-t : text to put on picture\n");
@@ -39,6 +42,8 @@ int main(int argc, char *argv[])
 
 	int width = DEFAULT_WIDTH;
 	int height = DEFAULT_HEIGHT;
+	int marginLeft = DEFAULT_MARGIN_LEFT;
+	int marginTop = DEFAULT_MARGIN_TOP;
 	int fontSize = DEFAULT_FONT_SIZE;
 
 	while ( (opt=getopt(argc, argv, optString)) != -1){
@@ -92,7 +97,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	createPictureFromText(text, filename, width, height, font, fontSize);
+	createPictureFromText(text, filename, width, height, font, fontSize, marginLeft, marginTop);
     
 	return 0; 
 } 
