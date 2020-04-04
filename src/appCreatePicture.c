@@ -7,7 +7,7 @@
 
 #define APP_VERSION				"1.0.0"
 
-#define PATH_TO_FONT 			"fonts/cmunrm.ttf"
+#define DEFAULT_FONT 			"fonts/cmunrm.ttf"
 
 #define DEFAULT_WIDTH 			128
 #define DEFAULT_HEIGHT			128
@@ -23,7 +23,7 @@
 
 // To parse argv
 // put ':' in the starting of the string so that program can distinguish between '?' and ':'
-static char optString[] = ":w:h:l:m:f:t:s:uv";
+static char optString[] = ":w:h:l:m:f:t:p:s:uv";
 
 static struct option longOptions[] =
 {
@@ -33,6 +33,7 @@ static struct option longOptions[] =
 	{"margin-top", required_argument, NULL, 'm'},
 	{"filename", required_argument, NULL, 'f'},
 	{"text", required_argument, NULL, 't'},
+	{"font", required_argument, NULL, 'p'},
 	{"size-font", required_argument, NULL, 's'},
 	{"usage", no_argument, NULL, 'u'},
 	{"version", no_argument, NULL, 'v'},
@@ -50,6 +51,7 @@ void usage(int exitValue){
 	fprintf(stdout, "\t--height|-h : height in pixels (default : %d)\n", DEFAULT_HEIGHT);
 	fprintf(stdout, "\t--margin-left|-l : margin-left in pixels (default : %d)\n", DEFAULT_MARGIN_LEFT);
 	fprintf(stdout, "\t--margin-top|-m : margin-top in pixels (default : %d)\n", DEFAULT_MARGIN_TOP);
+	fprintf(stdout, "\t--font|-p : path to font file (default : %s)\n", DEFAULT_FONT);
 	fprintf(stdout, "\t--size-font|-s : size of font (default : %d)\n", DEFAULT_FONT_SIZE);
 	fprintf(stdout, "\t--filename|-f : name of fileout (default : %s)\n", DEFAULT_NAME_FILE_OUT);
 	fprintf(stdout, "\t--usage|-u : Display usage\n");
@@ -73,7 +75,7 @@ int main(int argc, char *argv[])
 	char *text = NULL;
 	char *filename = NULL;
 
-	char *font = PATH_TO_FONT;
+	char *font = DEFAULT_FONT;
 
 	int width = DEFAULT_WIDTH;
 	int height = DEFAULT_HEIGHT;
@@ -95,6 +97,9 @@ int main(int argc, char *argv[])
 				break;
 			case 'm':
 				marginTop = atoi(optarg);
+				break;
+			case 'p':
+				font = optarg;
 				break;
 			case 's':
 				fontSize = atoi(optarg);

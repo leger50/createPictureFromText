@@ -11,6 +11,7 @@ Usage: appCreatePicture -t "complete sentence" -w WIDTH -h HEIGHT -s SIZE_FONT -
 	--height|-h : height in pixels (default : 128)
 	--margin-left|-l : margin-left in pixels (default : 0)
 	--margin-top|-m : margin-top in pixels (default : 0)
+	--font|-p : path to font file (default : fonts/cmunrm.ttf)
 	--size-font|-s : size of font (default : 16)
 	--filename|-f : name of fileout (default : fileout.png)
 	--usage|-u : Display usage

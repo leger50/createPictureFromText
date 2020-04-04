@@ -8,10 +8,14 @@
  * \brief      Create PNG picture from text
  * \details    
  *             
- * \param[in]   char *text      : text to put on picture
- * \param[in]   char *filename  : picture filename
- * \param[in]   int width       : width of picture
- * \param[in]   int height      : height of picture
+ * \param[in]   char *text              : text to put on picture
+ * \param[in]   char *filename          : picture filename
+ * \param[in]   int width               : width of picture
+ * \param[in]   int height              : height of picture
+ * \param[in]   const char* pathToFont  : complete path to font file
+ * \param[in]   int fontSize            : size font in pixel
+ * \param[in]   int marginLeft          : margin-left in pixel
+ * \param[in]   int marginTop           : margin-top in pixel
  *
  * \param[out] NA
  * \return     NA
@@ -188,7 +192,6 @@ void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scal
  * \return     NA
  *
  * \warning    Params[in] must be not null
- * \warning    Params[out] bitmap must be allocated before calling this function
  * \note       NA
  */
 /*---------------------------------------------------------------------------*/
