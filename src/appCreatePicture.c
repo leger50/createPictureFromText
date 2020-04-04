@@ -15,26 +15,48 @@
 #define DEFAULT_MARGIN_LEFT		0
 #define DEFAULT_MARGIN_TOP		0
 
+/******************************************************************************/
+/* Public variable definitions												  */
+/******************************************************************************/
+
+// To parse argv
+// put ':' in the starting of the string so that program can distinguish between '?' and ':'
+static char optString[] = ":w:h:l:m:f:t:s:u";
+
+static struct option longOptions[] =
+{
+    {"width", required_argument, NULL, 'w'},
+    {"height", required_argument, NULL, 'h'},
+	{"margin-left", required_argument, NULL, 'l'},
+	{"margin-top", required_argument, NULL, 'm'},
+	{"filename", required_argument, NULL, 'f'},
+	{"text", required_argument, NULL, 't'},
+	{"size-font", required_argument, NULL, 's'},
+	{"usage", no_argument, NULL, 'u'},
+    {NULL, 0, NULL, 0}
+};
+
+/******************************************************************************/
+/* Public functions                                                           */
+/******************************************************************************/
+
 void usage(int exitValue){
 	fprintf(stdout, "\nUsage: appCreatePicture -t \"complete sentence\" -w WIDTH -h HEIGHT -s SIZE_FONT -f \"fileout.png\"\n");
-	fprintf(stdout, "\t-t : text to put on picture\n");
-	fprintf(stdout, "\t-w : width in pixels (default : %d)\n", DEFAULT_WIDTH);
-	fprintf(stdout, "\t-h : height in pixels (default : %d)\n", DEFAULT_HEIGHT);
-	fprintf(stdout, "\t-l : margin-left in pixels (default : %d)\n", DEFAULT_MARGIN_LEFT);
-	fprintf(stdout, "\t-m : margin-top in pixels (default : %d)\n", DEFAULT_MARGIN_TOP);
-	fprintf(stdout, "\t-s : size of font (default : %d)\n", DEFAULT_FONT_SIZE);
-	fprintf(stdout, "\t-f : name of fileout (default : %s)\n", DEFAULT_NAME_FILE_OUT);
-	fprintf(stdout, "\t-u : Display usage\n");
+	fprintf(stdout, "\t--text|-t : text to put on picture\n");
+	fprintf(stdout, "\t--width|-w : width in pixels (default : %d)\n", DEFAULT_WIDTH);
+	fprintf(stdout, "\t--height|-h : height in pixels (default : %d)\n", DEFAULT_HEIGHT);
+	fprintf(stdout, "\t--margin-left|-l : margin-left in pixels (default : %d)\n", DEFAULT_MARGIN_LEFT);
+	fprintf(stdout, "\t--margin-top|-m : margin-top in pixels (default : %d)\n", DEFAULT_MARGIN_TOP);
+	fprintf(stdout, "\t--size-font|-s : size of font (default : %d)\n", DEFAULT_FONT_SIZE);
+	fprintf(stdout, "\t--filename|-f : name of fileout (default : %s)\n", DEFAULT_NAME_FILE_OUT);
+	fprintf(stdout, "\t--usage|-u : Display usage\n");
 	
 	exit(exitValue);
 }  
 
 int main(int argc, char *argv[])  
 { 
-	// To parse argv
-	// put ':' in the starting of the string so that program can distinguish between '?' and ':'
 	int opt;
-	char optString[] = ":w:h:l:m:f:t:s:u";
 
 	// To create picture
 	char *text = NULL;
@@ -48,7 +70,7 @@ int main(int argc, char *argv[])
 	int marginTop = DEFAULT_MARGIN_TOP;
 	int fontSize = DEFAULT_FONT_SIZE;
 
-	while ( (opt=getopt(argc, argv, optString)) != -1){
+	while ( (opt=getopt_long(argc, argv, optString, longOptions, NULL)) != -1){
 		
 		switch(opt){
 			case 'w':
