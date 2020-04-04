@@ -20,6 +20,8 @@ void usage(int exitValue){
 	fprintf(stdout, "\t-t : text to put on picture\n");
 	fprintf(stdout, "\t-w : width in pixels (default : %d)\n", DEFAULT_WIDTH);
 	fprintf(stdout, "\t-h : height in pixels (default : %d)\n", DEFAULT_HEIGHT);
+	fprintf(stdout, "\t-l : margin-left in pixels (default : %d)\n", DEFAULT_MARGIN_LEFT);
+	fprintf(stdout, "\t-m : margin-top in pixels (default : %d)\n", DEFAULT_MARGIN_TOP);
 	fprintf(stdout, "\t-s : size of font (default : %d)\n", DEFAULT_FONT_SIZE);
 	fprintf(stdout, "\t-f : name of fileout (default : %s)\n", DEFAULT_NAME_FILE_OUT);
 	fprintf(stdout, "\t-u : Display usage\n");
@@ -32,7 +34,7 @@ int main(int argc, char *argv[])
 	// To parse argv
 	// put ':' in the starting of the string so that program can distinguish between '?' and ':'
 	int opt;
-	char optString[] = ":w:h:f:t:s:u";
+	char optString[] = ":w:h:l:m:f:t:s:u";
 
 	// To create picture
 	char *text = NULL;
@@ -54,6 +56,12 @@ int main(int argc, char *argv[])
 				break;
 			case 'h':
 				height = atoi(optarg);
+				break;
+			case 'l':
+				marginLeft = atoi(optarg);
+				break;
+			case 'm':
+				marginTop = atoi(optarg);
 				break;
 			case 's':
 				fontSize = atoi(optarg);
