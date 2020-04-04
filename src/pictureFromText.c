@@ -42,7 +42,7 @@ void createPictureFromText(char *text, char *filename, int width, int height, co
     addTextToBitmap(&fontInfo, bitmap, scale, width, text);
 
     /*Save picture*/
-    printf("Picture info<text|width|height|filename> : %s|%d|%d|%s\n", text, width, height, filename);
+    printf("--- Picture info ---\nText : %s\nSize : %d x %d\nFilename : %s\n", text, width, height, filename);
 
     int result = stbi_write_png(filename, width, height, compoChannel, bitmap, width);
     if(result != 0){
@@ -119,6 +119,7 @@ unsigned char* readFontFile(const char* pathToFontFile)
 /*---------------------------------------------------------------------------*/
 void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scale, int width, const char *text){
     int x = 0;
+    int yLine = 0;
 
     int ascent, descent, lineGap;
     stbtt_GetFontVMetrics(fontInfo, &ascent, &descent, &lineGap);
@@ -127,26 +128,70 @@ void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scal
     descent *= scale;
 
     int textLenght = strlen(text);
-    for (int i = 0; i < textLenght; ++i)
+    int i = 0;
+    while (i < textLenght)
     {
-        /* get bounding box for character (may be offset to account for chars that dip above or below the line */
-        int c_x1, c_y1, c_x2, c_y2;
-        stbtt_GetCodepointBitmapBox(fontInfo, text[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
+        /*If '\n' then we change line*/
+        if(text[i] == '\\' && text[i+1] == 'n'){
+            changeTextLine(&x, &yLine, ascent);
 
-        /* compute y (different characters have different heights */
-        int y = ascent + c_y1;
+            i++; //to skip next character
+        
+        }else{
+            /* get bounding box for character (may be offset to account for chars that dip above or below the line */
+            int c_x1, c_y1, c_x2, c_y2;
+            stbtt_GetCodepointBitmapBox(fontInfo, text[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
 
-        /* render character (stride and offset is important here) */
-        int byteOffset = x + (y  * width);
-        stbtt_MakeCodepointBitmap(fontInfo, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, width, scale, scale, text[i]);
+            /* how wide is this character */
+            int ax;
+            stbtt_GetCodepointHMetrics(fontInfo, text[i], &ax, 0);
+            int hSizeCodepoint = ax * scale;
 
-        /* how wide is this character */
-        int ax;
-        stbtt_GetCodepointHMetrics(fontInfo, text[i], &ax, 0);
-        x += ax * scale;
+            /*Check if we can put character on picture, else, we change line*/
+            if( (x+hSizeCodepoint) >= width){
+                changeTextLine(&x, &yLine, ascent);
+            }
 
-        /* add kerning */
-        int kern = stbtt_GetCodepointKernAdvance(fontInfo, text[i], text[i + 1]);
-        x += kern * scale;
+            /* compute y (different characters have different heights) */
+            int y = yLine + ascent + c_y1;
+
+            /* render character (stride and offset is important here) */
+            int byteOffset = x + (y  * width);
+            stbtt_MakeCodepointBitmap(fontInfo, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, width, scale, scale, text[i]);
+
+            /* Increase x value with h size codepoint */
+            x += hSizeCodepoint;
+
+            /* add kerning */
+            int kern = stbtt_GetCodepointKernAdvance(fontInfo, text[i], text[i + 1]);
+            x += kern * scale;
+        }
+
+        i++;
     }
+}
+
+/*---------------------------------------------------------------------------*/
+/**
+ * \brief      Change (x,y) coordinates to next line
+ * \details    
+ *             
+ * \param[in]  int hSizeCharacter   : size H of font, equivalent to :
+ *                      stbtt_GetFontVMetrics(fontInfo, &ascent, &descent, &lineGap);
+ *                      ascent *= scale;
+ *                      hSizeCharacter = ascent; 
+ *
+ * \param[out] int *x               : x coordinate
+ * \param[out] int *line            : line coordinate
+ * 
+ * \return     NA
+ *
+ * \warning    Params[in] must be not null
+ * \warning    Params[out] bitmap must be allocated before calling this function
+ * \note       NA
+ */
+/*---------------------------------------------------------------------------*/
+void changeTextLine(int *x, int *line, int hSizeCharacter){
+    *x = 0;
+    *line += hSizeCharacter;
 }

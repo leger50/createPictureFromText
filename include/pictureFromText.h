@@ -15,5 +15,6 @@ void createPictureFromText(char *text, char *filename, int width, int height, co
 
 unsigned char* readFontFile(const char* pathToFontFile);
 void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scale, int width, const char *text);
+void changeTextLine(int *x, int *line, int hSizeCharacter);
 
 #endif /* PICTURE_FROM_TEXT_H_ */
