@@ -128,35 +128,47 @@ void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scal
     descent *= scale;
 
     int textLenght = strlen(text);
-    for (int i = 0; i < textLenght; ++i)
+    int i = 0;
+    while (i < textLenght)
     {
-        /* get bounding box for character (may be offset to account for chars that dip above or below the line */
-        int c_x1, c_y1, c_x2, c_y2;
-        stbtt_GetCodepointBitmapBox(fontInfo, text[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
-
-        /* how wide is this character */
-        int ax;
-        stbtt_GetCodepointHMetrics(fontInfo, text[i], &ax, 0);
-        int hSizeCodepoint = ax * scale;
-
-        /*Check if we can put character on picture, else, we change line*/
-        if( (x+hSizeCodepoint) >= width){
+        /*If '\n' then we change line*/
+        if(text[i] == '\\' && text[i+1] == 'n'){
             x = 0;
             yLine += ascent;
+
+            i++; //to skip next character
+        
+        }else{
+            /* get bounding box for character (may be offset to account for chars that dip above or below the line */
+            int c_x1, c_y1, c_x2, c_y2;
+            stbtt_GetCodepointBitmapBox(fontInfo, text[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
+
+            /* how wide is this character */
+            int ax;
+            stbtt_GetCodepointHMetrics(fontInfo, text[i], &ax, 0);
+            int hSizeCodepoint = ax * scale;
+
+            /*Check if we can put character on picture, else, we change line*/
+            if( (x+hSizeCodepoint) >= width){
+                x = 0;
+                yLine += ascent;
+            }
+
+            /* compute y (different characters have different heights) */
+            int y = yLine + ascent + c_y1;
+
+            /* render character (stride and offset is important here) */
+            int byteOffset = x + (y  * width);
+            stbtt_MakeCodepointBitmap(fontInfo, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, width, scale, scale, text[i]);
+
+            /* Increase x value with h size codepoint */
+            x += hSizeCodepoint;
+
+            /* add kerning */
+            int kern = stbtt_GetCodepointKernAdvance(fontInfo, text[i], text[i + 1]);
+            x += kern * scale;
         }
 
-        /* compute y (different characters have different heights) */
-        int y = yLine + ascent + c_y1;
-
-        /* render character (stride and offset is important here) */
-        int byteOffset = x + (y  * width);
-        stbtt_MakeCodepointBitmap(fontInfo, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, width, scale, scale, text[i]);
-
-        /* Increase x value with h size codepoint */
-        x += hSizeCodepoint;
-
-        /* add kerning */
-        int kern = stbtt_GetCodepointKernAdvance(fontInfo, text[i], text[i + 1]);
-        x += kern * scale;
+        i++;
     }
 }
