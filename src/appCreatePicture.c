@@ -55,7 +55,7 @@ void usage(int exitValue){
 	fprintf(stdout, "\t--usage|-u : Display usage\n");
 	fprintf(stdout, "\t--version|-v : Display version\n");
 	
-	fprintf(stdout, "\nNotes : Fonts supported are .ttf and .otf\n");
+	fprintf(stdout, "\nNotes :\n\tFonts supported are .ttf and .otf\n\tOnly characters on ASCII table are supported (0-127)\n");
 
 	exit(exitValue);
 }

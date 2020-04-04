@@ -148,7 +148,7 @@ void addTextToBitmap(stbtt_fontinfo *fontInfo, unsigned char* bitmap, float scal
             stbtt_GetCodepointHMetrics(fontInfo, text[i], &ax, 0);
             int hSizeCodepoint = ax * scale;
 
-            /*Check if we can put character on picture, else, we change line*/
+            /*Check if we can put character on picture (horizontally), else, we change line*/
             if( (x+hSizeCodepoint) >= width){
                 changeTextLine(&x, &yLine, ascent, marginLeft);
             }
