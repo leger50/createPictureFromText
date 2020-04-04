@@ -5,15 +5,19 @@
 
 #include "pictureFromText.h"
 
+#define PATH_TO_FONT 			"fonts/cmunrm.ttf"
+
 #define DEFAULT_WIDTH 			128
 #define DEFAULT_HEIGHT			128
+#define DEFAULT_FONT_SIZE		16
 #define DEFAULT_NAME_FILE_OUT 	"fileout.png"
 
 void usage(int exitValue){
-	fprintf(stdout, "\nUsage: appCreatePicture -t \"complete sentence\" -w WIDTH -h HEIGHT -f \"fileout.png\"\n");
+	fprintf(stdout, "\nUsage: appCreatePicture -t \"complete sentence\" -w WIDTH -h HEIGHT -s SIZE_FONT -f \"fileout.png\"\n");
 	fprintf(stdout, "\t-t : text to put on picture\n");
 	fprintf(stdout, "\t-w : width in pixels (default : %d)\n", DEFAULT_WIDTH);
 	fprintf(stdout, "\t-h : height in pixels (default : %d)\n", DEFAULT_HEIGHT);
+	fprintf(stdout, "\t-s : size of font (default : %d)\n", DEFAULT_FONT_SIZE);
 	fprintf(stdout, "\t-f : name of fileout (default : %s)\n", DEFAULT_NAME_FILE_OUT);
 	fprintf(stdout, "\t-u : Display usage\n");
 	
@@ -25,14 +29,17 @@ int main(int argc, char *argv[])
 	// To parse argv
 	// put ':' in the starting of the string so that program can distinguish between '?' and ':'
 	int opt;
-	char optString[] = ":w:h:f:t:u";
+	char optString[] = ":w:h:f:t:s:u";
 
 	// To create picture
 	char *text = NULL;
 	char *filename = NULL;
 
+	char *font = PATH_TO_FONT;
+
 	int width = DEFAULT_WIDTH;
 	int height = DEFAULT_HEIGHT;
+	int fontSize = DEFAULT_FONT_SIZE;
 
 	while ( (opt=getopt(argc, argv, optString)) != -1){
 		
@@ -42,6 +49,9 @@ int main(int argc, char *argv[])
 				break;
 			case 'h':
 				height = atoi(optarg);
+				break;
+			case 's':
+				fontSize = atoi(optarg);
 				break;
 			case 'f':
 				filename = optarg;
@@ -68,6 +78,11 @@ int main(int argc, char *argv[])
 		usage(EXIT_FAILURE);
 	}
 
+	if(!font){
+		fprintf(stderr, "Couldn't set specified font\n");
+		usage(EXIT_FAILURE);
+	}
+
 	if(!filename){
 		filename = DEFAULT_NAME_FILE_OUT;
 
@@ -77,7 +92,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	createPictureFromText(text, filename, width, height, "fonts/cmunrm.ttf", 16);
+	createPictureFromText(text, filename, width, height, font, fontSize);
     
 	return 0; 
 } 

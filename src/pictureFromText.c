@@ -42,7 +42,8 @@ void createPictureFromText(char *text, char *filename, int width, int height, co
     addTextToBitmap(&fontInfo, bitmap, scale, width, text);
 
     /*Save picture*/
-    printf("--- Picture info ---\nText : %s\nSize : %d x %d\nFilename : %s\n", text, width, height, filename);
+    printf("--- Picture info ---\nText : %s\nSize : %d x %d\nFilename : %s\nFont : %s (%d px)\n------\n", 
+        text, width, height, filename, pathToFont, fontSize);
 
     int result = stbi_write_png(filename, width, height, compoChannel, bitmap, width);
     if(result != 0){
