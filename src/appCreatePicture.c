@@ -5,6 +5,8 @@
 
 #include "pictureFromText.h"
 
+#define APP_VERSION				"1.0.0"
+
 #define PATH_TO_FONT 			"fonts/cmunrm.ttf"
 
 #define DEFAULT_WIDTH 			128
@@ -21,7 +23,7 @@
 
 // To parse argv
 // put ':' in the starting of the string so that program can distinguish between '?' and ':'
-static char optString[] = ":w:h:l:m:f:t:s:u";
+static char optString[] = ":w:h:l:m:f:t:s:uv";
 
 static struct option longOptions[] =
 {
@@ -33,6 +35,7 @@ static struct option longOptions[] =
 	{"text", required_argument, NULL, 't'},
 	{"size-font", required_argument, NULL, 's'},
 	{"usage", no_argument, NULL, 'u'},
+	{"version", no_argument, NULL, 'v'},
     {NULL, 0, NULL, 0}
 };
 
@@ -50,11 +53,17 @@ void usage(int exitValue){
 	fprintf(stdout, "\t--size-font|-s : size of font (default : %d)\n", DEFAULT_FONT_SIZE);
 	fprintf(stdout, "\t--filename|-f : name of fileout (default : %s)\n", DEFAULT_NAME_FILE_OUT);
 	fprintf(stdout, "\t--usage|-u : Display usage\n");
+	fprintf(stdout, "\t--version|-v : Display version\n");
 	
 	fprintf(stdout, "\nNotes : Fonts supported are .ttf and .otf\n");
 
 	exit(exitValue);
-}  
+}
+
+void displayVersion(){
+	fprintf(stdout, "%s\n", APP_VERSION);
+	exit(EXIT_SUCCESS);
+}
 
 int main(int argc, char *argv[])  
 { 
@@ -98,6 +107,9 @@ int main(int argc, char *argv[])
 				break;
 			case 'u':
 				usage(EXIT_SUCCESS);
+				break;
+			case 'v':
+				displayVersion();
 				break;
 			case ':':
 				fprintf(stderr, "Option -%c needs a value\n", optopt);
